@@ -19,7 +19,7 @@ class Registration {
         }
 
         try {
-            return UserFactoy.UserFactory.createUser(name, email, password, role, hasLicense);
+            return UserFactory.createUser(name, email, password, role, hasLicense);
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
             return null;

@@ -34,6 +34,10 @@ public class Guide implements User{
     public String getEmail() { return email; }
     @Override
     public String getRole() { return "GUIDE"; }
+    @Override
+    public boolean checkPassword(String password) {
+        return false;
+    }
 }
 
 
