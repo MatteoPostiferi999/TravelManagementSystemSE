@@ -15,13 +15,13 @@ public class UserManager {
 
     public User loginUser(String email, String password) {
         User user = users.get(email);
-        if (user != null && user instanceof Traveller) { // Puoi aggiungere controlli su password
+        if (user != null && user.checkPassword(password)) {
             System.out.println("Login successful. Welcome, " + user.getName() + "!");
             return user;
         } else {
             System.out.println("Invalid email or password.");
             return null;
         }
-    }
 
+    }
 }
