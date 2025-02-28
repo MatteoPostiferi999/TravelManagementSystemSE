@@ -7,7 +7,7 @@ public class Trip {
     private int availableSpots;
     private double price;
     private Guide assignedGuide;
-    private List<Enums.Skill> requiredSkills;
+    private List<Enums.Skill> requiredGuideSkills;
 
     public Trip(String id, String destination, List<Activity> activities, int availableSpots, double price) {
         this.id = id;
@@ -16,8 +16,8 @@ public class Trip {
         this.availableSpots = availableSpots;
         this.price = price;
     }
-    public List<Enums.Skill> getRequiredSkills() {
-        return requiredSkills;
+    public List<Enums.Skill> getRequiredGuideSkills() {
+        return requiredGuideSkills;
     }
 
 }

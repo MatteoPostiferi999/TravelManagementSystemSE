@@ -23,6 +23,12 @@ public class Traveller implements User{
     public String getEmail() { return email; }
     @Override
     public String getRole() { return "TRAVELER"; }
+
+
+
+
+
+
 }
 
 
