@@ -39,4 +39,30 @@ class UserManager {
             System.out.println("No user is currently logged in.");
         }
     }
+
+    public User getLoggedInUser() {
+        return loggedInUser;
+    }
+
+
+    public void updateUserDetails(String newEmail, String newPassword) {
+        if (loggedInUser != null) {
+            loggedInUser.setEmail(newEmail);
+            loggedInUser.setPassword(newPassword);
+            System.out.println("User details updated successfully!");
+        } else {
+            System.out.println("No user is logged in to update.");
+        }
+    }
+
+    // Metodo per cancellare l'account dell'utente
+    public void deleteUserAccount() {
+        if (loggedInUser != null) {
+            users.remove(loggedInUser);
+            System.out.println("Account deleted successfully!");
+            loggedInUser = null;
+        } else {
+            System.out.println("No user is logged in to delete.");
+        }
+    }
 }

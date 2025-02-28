@@ -1,6 +1,5 @@
 import java.util.Scanner;
 
-
 public class TravelPlatform {
 
     public static void main(String[] args) {
@@ -9,7 +8,7 @@ public class TravelPlatform {
         boolean running = true;
 
         while (running) {
-            System.out.println("\n1. Register\n2. Login\n3. Logout\n4. Exit");
+            System.out.println("\n1. Register\n2. Login\n3. Logout\n4. Update Details\n5. Delete Account\n6. Exit");
             System.out.print("Choose an option: ");
             int choice = scanner.nextInt();
             scanner.nextLine(); // Pulisce il buffer
@@ -32,7 +31,33 @@ public class TravelPlatform {
                     userManager.logoutUser();
                     break;
 
-                case 4: // Esci
+                case 4: // Modifica Dati
+                    if (userManager.getLoggedInUser() != null) {
+                        System.out.print("Enter new email: ");
+                        String newEmail = scanner.nextLine();
+                        System.out.print("Enter new password: ");
+                        String newPassword = scanner.nextLine();
+                        userManager.updateUserDetails(newEmail, newPassword);
+                    } else {
+                        System.out.println("You must be logged in to update your details.");
+                    }
+                    break;
+
+                case 5: // Cancella Account
+                    if (userManager.getLoggedInUser() != null) {
+                        System.out.print("Are you sure you want to delete your account? (yes/no): ");
+                        String confirm = scanner.nextLine();
+                        if (confirm.equalsIgnoreCase("yes")) {
+                            userManager.deleteUserAccount();
+                        } else {
+                            System.out.println("Account deletion cancelled.");
+                        }
+                    } else {
+                        System.out.println("You must be logged in to delete your account.");
+                    }
+                    break;
+
+                case 6: // Esci
                     running = false;
                     System.out.println("Exiting...");
                     break;
@@ -44,4 +69,3 @@ public class TravelPlatform {
         scanner.close();
     }
 }
-
