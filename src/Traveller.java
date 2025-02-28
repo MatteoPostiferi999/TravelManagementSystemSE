@@ -23,6 +23,10 @@ public class Traveller implements User{
     public String getEmail() { return email; }
     @Override
     public String getRole() { return "TRAVELER"; }
+    @Override
+    public boolean checkPassword(String inputPassword) {
+        return this.password.equals(inputPassword);
+    }
 
 
 
