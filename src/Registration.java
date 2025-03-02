@@ -1,3 +1,4 @@
+import java.util.List;
 import java.util.Scanner;
 
 class Registration {
@@ -11,6 +12,7 @@ class Registration {
         String password = scanner.nextLine();
         System.out.println("Are you a Traveler or a Guide? (T/G)");
         String role = scanner.nextLine().toUpperCase();
+        TravellerPreferences preferences = null;
 
         boolean hasLicense = false;
         if (role.equals("G")) {
@@ -19,7 +21,7 @@ class Registration {
         }
 
         try {
-            return UserFactory.createUser(name, email, password, role, hasLicense);
+            return UserFactory.createUser(name, email, password, role, hasLicense, preferences);
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
             return null;

@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 import java.util.stream.Collectors;
 
 public class TripManager {
@@ -29,12 +30,40 @@ public class TripManager {
     }
 
     // Prenota un posto in un viaggio
-    public boolean bookTrip(Traveller traveller, Trip trip) {
-        if (trip.bookSpot()) {
-            traveller.addBookedTrip(trip);
-            return true;
+    public void searchAndBookTrip(Traveller traveller) {
+        List<Trip> suitableTrips = getSuitableTrips(traveller);
+
+        if (suitableTrips.isEmpty()) {
+            System.out.println("Nessun viaggio disponibile in base alle tue preferenze.");
+            return;
         }
-        return false;
+
+        // Mostra i viaggi disponibili
+        System.out.println("Viaggi disponibili:");
+        for (int i = 0; i < suitableTrips.size(); i++) {
+            System.out.println((i + 1) + ". " + suitableTrips.get(i).getDestination() +
+                    " - Prezzo: " + suitableTrips.get(i).getPrice());
+        }
+
+        // L'utente sceglie un viaggio
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Inserisci il numero del viaggio che vuoi prenotare: ");
+        int choice = scanner.nextInt();
+
+        if (choice < 1 || choice > suitableTrips.size()) {
+            System.out.println("Scelta non valida.");
+            return;
+        }
+
+        Trip selectedTrip = suitableTrips.get(choice - 1);
+
+        // Effettua la prenotazione
+        if (selectedTrip.bookSpot()) {
+            traveller.addBookedTrip(selectedTrip);
+            System.out.println("Prenotazione confermata per il viaggio a " + selectedTrip.getDestination());
+        } else {
+            System.out.println("Prenotazione fallita: posti esauriti.");
+        }
     }
 
     // Cancella una prenotazione
