@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class Traveller implements User {
     private String id;
@@ -73,5 +74,18 @@ public class Traveller implements User {
 
     public String getPassword() {
         return password;
+    }
+
+    public PaymentDetails providePaymentDetails() {
+        // Implementa la logica per ottenere i dettagli di pagamento, ad esempio tramite input dell'utente
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Inserisci il numero della carta di credito: ");
+        String cardNumber = scanner.next();
+        System.out.print("Inserisci la data di scadenza (MM/AA): ");
+        String expirationDate = scanner.next();
+        System.out.print("Inserisci il CVV: ");
+        String cvv = scanner.next();
+
+        return new PaymentDetails(cardNumber, expirationDate, cvv);
     }
 }

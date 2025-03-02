@@ -27,7 +27,6 @@ public class TripManager {
                 .collect(Collectors.toList());
     }
 
-    // Metodo per cercare e prenotare un viaggio con interazione migliorata
     public void searchAndBookTrip(Traveller traveller) {
         Scanner scanner = new Scanner(System.in);
 
@@ -88,8 +87,20 @@ public class TripManager {
 
             if (confirm == 's') {
                 if (selectedTrip.bookSpot()) {
-                    traveller.addBookedTrip(selectedTrip);
-                    System.out.println("🎉 Prenotazione confermata per il viaggio a " + selectedTrip.getDestination() + "!");
+                    // Crea l'oggetto Booking
+                    PaymentDetails paymentDetails = traveller.providePaymentDetails(); // Metodo per ottenere i dettagli di pagamento
+                    Booking booking = new Booking(selectedTrip, paymentDetails);
+
+                    // Processa il pagamento
+                    PaymentProcessor paymentProcessor = new PaymentProcessor();
+                    boolean paymentSuccess = paymentProcessor.processPayment(booking);
+
+                    if (paymentSuccess) {
+                        traveller.addBookedTrip(selectedTrip);
+                        System.out.println("🎉 Prenotazione confermata per il viaggio a " + selectedTrip.getDestination() + "!");
+                    } else {
+                        System.out.println("❌ Il pagamento è fallito. Prenotazione non completata.");
+                    }
                 } else {
                     System.out.println("❌ Prenotazione fallita: posti esauriti.");
                 }
@@ -203,6 +214,4 @@ public class TripManager {
             }
         }
     }
-
-    // Altri metodi esistenti...
 }
