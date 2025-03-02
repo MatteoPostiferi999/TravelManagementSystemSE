@@ -53,6 +53,26 @@ public class Trip {
         return price;
     }
 
+    public int getDurationDays() {
+        return durationDays;
+    }
+
+    public String getMinAge() {
+        return minAge + "";
+    }
+
+    public String getMaxAge() {
+        return maxAge + "";
+    }
+
+    public String getMinBudget() {
+        return minBudget + "";
+    }
+
+    public String getMaxBudget() {
+        return maxBudget + "";
+    }
+
     public Guide getAssignedGuide() {
         return assignedGuide;
     }
@@ -112,4 +132,5 @@ public class Trip {
 
         return ageMatch && budgetMatch && durationMatch && preferencesMatch;
     }
+
 }

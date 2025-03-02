@@ -22,47 +22,80 @@ public class TripManager {
 
     // Trova i viaggi che corrispondono alle preferenze di un viaggiatore
     public List<Trip> getSuitableTrips(Traveller traveller) {
-        TravellerPreferences preferences = traveller.getPreferences(); // Ottieni le preferenze del viaggiatore
-
         return allTrips.stream()
-                .filter(trip -> trip.isSuitableForTraveller(preferences)) // Usa il metodo già definito in Trip
+                .filter(trip -> trip.isSuitableForTraveller(traveller.getPreferences()))
                 .collect(Collectors.toList());
     }
 
-    // Prenota un posto in un viaggio
+    // Metodo per cercare e prenotare un viaggio con interazione migliorata
     public void searchAndBookTrip(Traveller traveller) {
-        List<Trip> suitableTrips = getSuitableTrips(traveller);
-
-        if (suitableTrips.isEmpty()) {
-            System.out.println("Nessun viaggio disponibile in base alle tue preferenze.");
-            return;
-        }
-
-        // Mostra i viaggi disponibili
-        System.out.println("Viaggi disponibili:");
-        for (int i = 0; i < suitableTrips.size(); i++) {
-            System.out.println((i + 1) + ". " + suitableTrips.get(i).getDestination() +
-                    " - Prezzo: " + suitableTrips.get(i).getPrice());
-        }
-
-        // L'utente sceglie un viaggio
         Scanner scanner = new Scanner(System.in);
-        System.out.print("Inserisci il numero del viaggio che vuoi prenotare: ");
-        int choice = scanner.nextInt();
 
-        if (choice < 1 || choice > suitableTrips.size()) {
-            System.out.println("Scelta non valida.");
-            return;
-        }
+        while (true) {
+            List<Trip> suitableTrips = getSuitableTrips(traveller);
 
-        Trip selectedTrip = suitableTrips.get(choice - 1);
+            if (suitableTrips.isEmpty()) {
+                System.out.println("❌ Nessun viaggio disponibile in base alle tue preferenze.");
+                return;
+            }
 
-        // Effettua la prenotazione
-        if (selectedTrip.bookSpot()) {
-            traveller.addBookedTrip(selectedTrip);
-            System.out.println("Prenotazione confermata per il viaggio a " + selectedTrip.getDestination());
-        } else {
-            System.out.println("Prenotazione fallita: posti esauriti.");
+            // Mostra i viaggi disponibili con più dettagli
+            System.out.println("\n🌍 **Viaggi disponibili:**");
+            for (int i = 0; i < suitableTrips.size(); i++) {
+                Trip trip = suitableTrips.get(i);
+                System.out.println((i + 1) + ". " + trip.getDestination() +
+                        " | Prezzo: " + trip.getPrice() + "€" +
+                        " | Durata: " + trip.getDurationDays() + " giorni" +
+                        " | Tipo: " + trip.getTripType() +
+                        " | Posti disponibili: " + trip.getAvailableSpots());
+            }
+            System.out.println("0. 🔙 Torna indietro");
+
+            // L'utente sceglie un viaggio
+            System.out.print("\n📌 Inserisci il numero del viaggio per vedere i dettagli o 0 per tornare indietro: ");
+            int choice = scanner.nextInt();
+
+            if (choice == 0) {
+                System.out.println("🔙 Ritorno al menu principale...");
+                return;
+            }
+
+            if (choice < 1 || choice > suitableTrips.size()) {
+                System.out.println("❌ Scelta non valida, riprova.");
+                continue;
+            }
+
+            Trip selectedTrip = suitableTrips.get(choice - 1);
+
+            // Mostra dettagli del viaggio selezionato
+            System.out.println("\n📋 **Dettagli del viaggio a " + selectedTrip.getDestination() + "**");
+            System.out.println("🔹 Prezzo: " + selectedTrip.getPrice() + "€");
+            System.out.println("🔹 Durata: " + selectedTrip.getDurationDays() + " giorni");
+            System.out.println("🔹 Tipo di viaggio: " + selectedTrip.getTripType());
+            System.out.println("🔹 Età minima: " + selectedTrip.getMinAge());
+            System.out.println("🔹 Età massima: " + selectedTrip.getMaxAge());
+            System.out.println("🔹 Budget minimo: " + selectedTrip.getMinBudget() + "€");
+            System.out.println("🔹 Budget massimo: " + selectedTrip.getMaxBudget() + "€");
+            System.out.println("🔹 Posti disponibili: " + selectedTrip.getAvailableSpots());
+            System.out.println("🔹 Attività incluse: ");
+            for (Activity activity : selectedTrip.getActivities()) {
+                System.out.println("   - " + activity.getName());
+            }
+
+            // Chiedi conferma per la prenotazione
+            System.out.print("\n✅ Vuoi prenotare questo viaggio? (s/n): ");
+            char confirm = scanner.next().toLowerCase().charAt(0);
+
+            if (confirm == 's') {
+                if (selectedTrip.bookSpot()) {
+                    traveller.addBookedTrip(selectedTrip);
+                    System.out.println("🎉 Prenotazione confermata per il viaggio a " + selectedTrip.getDestination() + "!");
+                } else {
+                    System.out.println("❌ Prenotazione fallita: posti esauriti.");
+                }
+            } else {
+                System.out.println("🚫 Prenotazione annullata. Ritorno al menu...");
+            }
         }
     }
 

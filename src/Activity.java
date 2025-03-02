@@ -17,5 +17,9 @@ public class Activity {
         this.location = location;
         this.guides = guides;
     }
+
+    public String getName() {
+        return name;
+    }
 }
 
