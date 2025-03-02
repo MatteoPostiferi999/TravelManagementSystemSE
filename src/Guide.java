@@ -32,6 +32,12 @@ public class Guide implements User{
     public String getName() { return name; }
     @Override
     public String getEmail() { return email; }
+
+    @Override
+    public String getPassword() {
+        return "";
+    }
+
     @Override
     public String getRole() { return "GUIDE"; }
     @Override
@@ -40,6 +46,13 @@ public class Guide implements User{
     public void setEmail(String newEmail) { this.email = newEmail; }
     @Override
     public void setPassword(String newPassword) { this.password = newPassword; }
+
+    public void addAssignedTrip(Trip selectedTrip) {
+        assignedTrips.add(selectedTrip);
+    }
+    public void removeAssignedTrip(Trip selectedTrip) {
+        assignedTrips.remove(selectedTrip);
+    }
 }
 
 

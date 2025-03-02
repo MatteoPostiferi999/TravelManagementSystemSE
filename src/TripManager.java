@@ -127,4 +127,82 @@ public class TripManager {
     public List<Trip> getAllTrips() {
         return new ArrayList<>(allTrips);
     }
+
+
+    public List<Trip> getSuitableTripsForGuide(Guide guide) {
+        return allTrips.stream()
+                .filter(trip -> trip.getRequiredGuideSkills().stream().allMatch(skill -> guide.getSkills().contains(skill)))
+                .collect(Collectors.toList());
+    }
+
+    // Metodo per far scegliere un viaggio da parte di una guida
+    public void assignGuideToTrip(Guide guide) {
+        Scanner scanner = new Scanner(System.in);
+
+        while (true) {
+            List<Trip> suitableTrips = getSuitableTripsForGuide(guide);
+
+            if (suitableTrips.isEmpty()) {
+                System.out.println("❌ Nessun viaggio disponibile per le tue competenze.");
+                return;
+            }
+
+            // Mostra i viaggi disponibili con i requisiti per la guida
+            System.out.println("\n🌍 **Viaggi disponibili per te (con requisiti per la guida):**");
+            for (int i = 0; i < suitableTrips.size(); i++) {
+                Trip trip = suitableTrips.get(i);
+                System.out.println((i + 1) + ". " + trip.getDestination() +
+                        " | Tipo: " + trip.getTripType() +
+                        " | Durata: " + trip.getDurationDays() + " giorni" +
+                        " | Posti disponibili: " + trip.getAvailableSpots());
+
+                // Mostra i requisiti specifici per il viaggio
+                System.out.println("  ➡️ Requisiti guida: " + trip.getRequiredGuideSkills());
+            }
+            System.out.println("0. 🔙 Torna indietro");
+
+            // L'utente sceglie un viaggio
+            System.out.print("\n📌 Inserisci il numero del viaggio per vederne i dettagli o 0 per tornare indietro: ");
+            int choice = scanner.nextInt();
+
+            if (choice == 0) {
+                System.out.println("🔙 Ritorno al menu principale...");
+                return;
+            }
+
+            if (choice < 1 || choice > suitableTrips.size()) {
+                System.out.println("❌ Scelta non valida, riprova.");
+                continue;
+            }
+
+            Trip selectedTrip = suitableTrips.get(choice - 1);
+
+            // Mostra dettagli del viaggio selezionato, concentrandosi sui requisiti della guida
+            System.out.println("\n📋 **Dettagli del viaggio a " + selectedTrip.getDestination() + "**");
+            System.out.println("🔹 Tipo di viaggio: " + selectedTrip.getTripType());
+            System.out.println("🔹 Durata: " + selectedTrip.getDurationDays() + " giorni");
+            System.out.println("🔹 Età minima richiesta: " + selectedTrip.getMinAge());
+            System.out.println("🔹 Età massima richiesta: " + selectedTrip.getMaxAge());
+            System.out.println("🔹 Budget minimo richiesto: " + selectedTrip.getMinBudget() + "€");
+            System.out.println("🔹 Budget massimo richiesto: " + selectedTrip.getMaxBudget() + "€");
+            System.out.println("🔹 Requisiti guida: ");
+            for (Enums.Skill skill : selectedTrip.getRequiredGuideSkills()) {
+                System.out.println("   - " + skill);
+            }
+
+            // Chiedi conferma per l'assegnazione della guida
+            System.out.print("\n✅ Vuoi essere assegnato a questo viaggio? (s/n): ");
+            char confirm = scanner.next().toLowerCase().charAt(0);
+
+            if (confirm == 's') {
+                selectedTrip.assignGuide(guide);
+                guide.addAssignedTrip(selectedTrip);
+                System.out.println("🎉 Guida assegnata al viaggio a " + selectedTrip.getDestination() + "!");
+            } else {
+                System.out.println("🚫 Assegnazione annullata. Ritorno al menu...");
+            }
+        }
+    }
+
+    // Altri metodi esistenti...
 }
