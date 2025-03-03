@@ -63,11 +63,13 @@ public class Trip {
     public void assignGuide(Guide guide) {
         if (assignedGuides.size() < requiredGuides) {
             assignedGuides.add(guide);
+            guide.addAssignedTrip(this); // Aggiunge il viaggio alla guida
             guide.notifyApproval(this);
         } else {
             System.out.println("Numero massimo di guide già assegnato per questo viaggio.");
         }
     }
+
 
     // Metodo per prenotare un posto
     public boolean bookSpot() {

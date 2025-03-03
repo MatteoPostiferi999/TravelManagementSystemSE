@@ -27,4 +27,23 @@ public class GuideApplication {
     public boolean isApproved() {
         return approved;
     }
+
+    // Metodo per annullare la candidatura
+    public void cancelApplication() {
+        trip.getGuideApplications().remove(this); // Rimuove la candidatura dalla lista del viaggio
+        System.out.println("Candidatura di " + guide.getName() + " per il viaggio " + trip.getDestination() + " è stata cancellata.");
+    }
+
+    // Metodo per inviare una nuova candidatura, se soddisfa i requisiti
+    public static GuideApplication submitApplication(Guide guide, Trip trip) {
+        if (guide.hasLicense() && guide.getSkills().containsAll(trip.getRequiredGuideSkills())) {
+            GuideApplication application = new GuideApplication(guide, trip);
+            trip.addGuideApplication(application);
+            System.out.println("Candidatura di " + guide.getName() + " per il viaggio " + trip.getDestination() + " è stata inviata.");
+            return application;
+        } else {
+            System.out.println("Impossibile inviare la candidatura: la guida non soddisfa i requisiti.");
+            return null;
+        }
+    }
 }

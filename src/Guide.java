@@ -29,6 +29,7 @@ public class Guide implements User{
         return skills;
     }
 
+
     public void notifyApproval(Trip trip) {
         System.out.println("Congratulazioni! Sei stato approvato per il viaggio: " + trip);
     }
@@ -63,6 +64,17 @@ public class Guide implements User{
     }
     public void removeAssignedTrip(Trip selectedTrip) {
         assignedTrips.remove(selectedTrip);
+    }
+    // Metodo per annullare la candidatura da un viaggio
+    public void cancelApplication(Trip trip) {
+        GuideApplication application = trip.getGuideApplications().stream()
+                .filter(app -> app.getGuide().equals(this))
+                .findFirst().orElse(null);
+        if (application != null) {
+            application.cancelApplication();
+        } else {
+            System.out.println("Nessuna candidatura trovata per questo viaggio.");
+        }
     }
 }
 
