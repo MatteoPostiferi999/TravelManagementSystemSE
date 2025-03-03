@@ -7,21 +7,23 @@ public class Trip {
     private List<Activity> activities;
     private int availableSpots;
     private double price;
-    private Guide assignedGuide;
+    private List<Guide> assignedGuides;
+    private List<GuideApplication> guideApplications;
     private List<Enums.Skill> requiredGuideSkills;
-    private Enums.TripType tripType; // Nuovo tipo di viaggio
-    private int minAge;          // Età minima
-    private int maxAge;          // Età massima
-    private double minBudget;    // Budget minimo
-    private double maxBudget;    // Budget massimo
-    private int durationDays;    // Durata in giorni
+    private Enums.TripType tripType;
+    private int minAge;
+    private int maxAge;
+    private double minBudget;
+    private double maxBudget;
+    private int durationDays;
+    private int requiredGuides;
 
     public Trip(String id, String destination, List<Activity> activities, int availableSpots, double price,
                 List<Enums.Skill> requiredGuideSkills, Enums.TripType tripType,
-                int minAge, int maxAge, double minBudget, double maxBudget, int durationDays) {
+                int minAge, int maxAge, double minBudget, double maxBudget, int durationDays, int requiredGuides) {
         this.id = id;
         this.destination = destination;
-        this.activities = activities;
+        this.activities = (activities != null) ? activities : new ArrayList<>();
         this.availableSpots = availableSpots;
         this.price = price;
         this.requiredGuideSkills = requiredGuideSkills;
@@ -31,63 +33,40 @@ public class Trip {
         this.minBudget = minBudget;
         this.maxBudget = maxBudget;
         this.durationDays = durationDays;
+        this.requiredGuides = requiredGuides;
+        this.assignedGuides = new ArrayList<>();
+        this.guideApplications = new ArrayList<>();
     }
 
-    public String getId() {
-        return id;
+    public String getId() { return id; }
+    public String getDestination() { return destination; }
+    public List<Activity> getActivities() { return activities; }
+    public int getAvailableSpots() { return availableSpots; }
+    public double getPrice() { return price; }
+    public int getDurationDays() { return durationDays; }
+    public int getMinAge() { return minAge; }
+    public int getMaxAge() { return maxAge; }
+    public double getMinBudget() { return minBudget; }
+    public double getMaxBudget() { return maxBudget; }
+    public List<Guide> getAssignedGuides() { return assignedGuides; }
+    public List<GuideApplication> getGuideApplications() { return guideApplications; }
+    public List<Enums.Skill> getRequiredGuideSkills() { return requiredGuideSkills; }
+    public Enums.TripType getTripType() { return tripType; }
+
+    // Aggiunge una candidatura per una guida
+    public void addGuideApplication(GuideApplication application) {
+        guideApplications.add(application);
+        System.out.println("Candidatura aggiunta per guida: " + application.getGuide().getName());
     }
 
-    public String getDestination() {
-        return destination;
-    }
-
-    public List<Activity> getActivities() {
-        return activities;
-    }
-
-    public int getAvailableSpots() {
-        return availableSpots;
-    }
-
-    public double getPrice() {
-        return price;
-    }
-
-    public int getDurationDays() {
-        return durationDays;
-    }
-
-    public String getMinAge() {
-        return minAge + "";
-    }
-
-    public String getMaxAge() {
-        return maxAge + "";
-    }
-
-    public String getMinBudget() {
-        return minBudget + "";
-    }
-
-    public String getMaxBudget() {
-        return maxBudget + "";
-    }
-
-    public Guide getAssignedGuide() {
-        return assignedGuide;
-    }
-
-    public List<Enums.Skill> getRequiredGuideSkills() {
-        return requiredGuideSkills;
-    }
-
-    public Enums.TripType getTripType() {
-        return tripType; // Restituisce il tipo di viaggio
-    }
-
-    // Metodo per assegnare una guida al viaggio
+    // Assegna una guida al viaggio (supporta più guide)
     public void assignGuide(Guide guide) {
-        this.assignedGuide = guide;
+        if (assignedGuides.size() < requiredGuides) {
+            assignedGuides.add(guide);
+            guide.notifyApproval(this);
+        } else {
+            System.out.println("Numero massimo di guide già assegnato per questo viaggio.");
+        }
     }
 
     // Metodo per prenotare un posto
@@ -118,12 +97,12 @@ public class Trip {
         activities.remove(activity);
     }
 
+    // Metodo per verificare se il viaggio è adatto a un viaggiatore
     public boolean isSuitableForTraveller(TravellerPreferences preferences) {
         boolean ageMatch = (preferences.getAge() >= minAge && preferences.getAge() <= maxAge);
         boolean budgetMatch = (preferences.getBudget() >= minBudget && preferences.getBudget() <= maxBudget);
         boolean durationMatch = (preferences.getDuration() <= durationDays);
 
-        // Verifica se tutte le preferenze del viaggiatore combaciano con il tipo di viaggio
         boolean preferencesMatch = preferences.getPreferences().stream().allMatch(preference ->
                 (preference == Enums.Preference.ADVENTURE && tripType == Enums.TripType.ADVENTURE_TRIP) ||
                         (preference == Enums.Preference.RELAX && (tripType == Enums.TripType.LUXURY_TRIP || tripType == Enums.TripType.FAMILY_FRIENDLY)) ||
@@ -132,5 +111,4 @@ public class Trip {
 
         return ageMatch && budgetMatch && durationMatch && preferencesMatch;
     }
-
 }

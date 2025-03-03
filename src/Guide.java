@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.List;
 
 public class Guide implements User{
@@ -16,6 +17,8 @@ public class Guide implements User{
         this.password = password;
         this.skills = skills;
         this.hasLicense = hasLicense;
+        this.assignedTrips = new ArrayList<>();
+
     }
 
     public boolean hasLicense() {
@@ -24,6 +27,14 @@ public class Guide implements User{
 
     public List<Enums.Skill> getSkills() {
         return skills;
+    }
+
+    public void notifyApproval(Trip trip) {
+        System.out.println("Congratulazioni! Sei stato approvato per il viaggio: " + trip);
+    }
+
+    public void notifyRejection(Trip trip) {
+        System.out.println("Spiacente, la tua candidatura per il viaggio " + trip + " è stata rifiutata.");
     }
 
     @Override

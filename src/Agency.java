@@ -1,5 +1,15 @@
+import java.util.*;
+
 public class Agency {
-    public boolean approveGuide(Guide guide, Trip trip) {
-        return guide.hasLicense() && guide.getSkills().containsAll(trip.getRequiredGuideSkills());
+    public void submitGuideApplication(Guide guide, Trip trip) {
+        trip.addGuideApplication(new GuideApplication(guide, trip));
+    }
+
+    public void reviewGuideApplication(GuideApplication application, boolean approved) {
+        if (approved) {
+            application.approve();
+        } else {
+            application.reject();
+        }
     }
 }
