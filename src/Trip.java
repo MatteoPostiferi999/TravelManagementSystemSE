@@ -17,6 +17,8 @@ public class Trip {
     private double maxBudget;
     private int durationDays;
     private int requiredGuides;
+    private List<Review> reviews;  // Lista di recensioni per le guide
+
 
     public Trip(String id, String destination, List<Activity> activities, int availableSpots, double price,
                 List<Enums.Skill> requiredGuideSkills, Enums.TripType tripType,
@@ -36,6 +38,7 @@ public class Trip {
         this.requiredGuides = requiredGuides;
         this.assignedGuides = new ArrayList<>();
         this.guideApplications = new ArrayList<>();
+        this.reviews = new ArrayList<>();
     }
 
     public String getId() { return id; }
@@ -113,4 +116,19 @@ public class Trip {
 
         return ageMatch && budgetMatch && durationMatch && preferencesMatch;
     }
+
+    // Metodo per lasciare una recensione
+    public void leaveReview(Guide guide, Traveller traveller, int rating, String comment) {
+        // Verifica che il viaggiatore abbia partecipato al viaggio
+        if (assignedGuides.contains(guide)) {
+            Review review = new Review(guide, traveller, rating, comment);
+            reviews.add(review);
+            guide.addReview(review);  // Aggiunge la recensione alla guida
+            System.out.println("📢 Recensione lasciata con successo!");
+        } else {
+            System.out.println("❌ Non puoi lasciare una recensione per una guida che non hai incontrato.");
+        }
+    }
+
+
 }

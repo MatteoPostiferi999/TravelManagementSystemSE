@@ -9,6 +9,8 @@ public class Guide implements User{
     private List<Enums.Skill> skills;
     private boolean hasLicense;
     private List<Trip> assignedTrips;
+    private List<Review> reviews;  // Lista delle recensioni
+
 
     public Guide(String id, String name, String email, String password, List<Enums.Skill> skills, boolean hasLicense) {
         this.id = id;
@@ -18,6 +20,7 @@ public class Guide implements User{
         this.skills = skills;
         this.hasLicense = hasLicense;
         this.assignedTrips = new ArrayList<>();
+        this.reviews = new ArrayList<>();
 
     }
 
@@ -36,6 +39,32 @@ public class Guide implements User{
 
     public void notifyRejection(Trip trip) {
         System.out.println("Spiacente, la tua candidatura per il viaggio " + trip + " è stata rifiutata.");
+    }
+
+    // Metodo per aggiungere una recensione alla guida
+    public void addReview(Review review) {
+        reviews.add(review);
+    }
+
+    // Metodo per calcolare la valutazione media
+    public double getAverageRating() {
+        return reviews.stream()
+                .mapToInt(Review::getRating)
+                .average()
+                .orElse(0.0);
+    }
+
+    // Metodo per visualizzare tutte le recensioni
+    public void showAllReviews() {
+        if (reviews.isEmpty()) {
+            System.out.println("❌ Nessuna recensione disponibile.");
+            return;
+        }
+
+        System.out.println("\n🌟 Recensioni per " + name + ":");
+        for (Review review : reviews) {
+            System.out.println("Rating: " + review.getRating() + "/5 - Commento: " + review.getComment());
+        }
     }
 
     @Override

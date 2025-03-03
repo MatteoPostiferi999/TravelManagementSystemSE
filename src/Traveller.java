@@ -88,4 +88,13 @@ public class Traveller implements User {
 
         return new PaymentDetails(cardNumber, expirationDate, cvv);
     }
+
+    // Metodo per lasciare una recensione
+    public void leaveReview(Trip trip, Guide guide, int rating, String comment) {
+        if (bookedTrips.contains(trip)) {
+            trip.leaveReview(guide, this, rating, comment);
+        } else {
+            System.out.println("❌ Non hai partecipato a questo viaggio, non puoi lasciare una recensione.");
+        }
+    }
 }
