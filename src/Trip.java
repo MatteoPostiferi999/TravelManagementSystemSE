@@ -74,22 +74,19 @@ public class Trip {
     }
 
 
-    // Metodo per prenotare un posto
-    public boolean bookSpot() {
-        if (availableSpots > 0) {
-            availableSpots--;
+    // Metodo per prenotare più posti
+    public boolean bookSpots(int numberOfPeople) {
+        if (availableSpots >= numberOfPeople) {
+            availableSpots -= numberOfPeople;
             return true;
         }
         return false;
     }
 
-    // Metodo per annullare una prenotazione
-    public boolean cancelBooking() {
-        if (availableSpots >= 0) {
-            availableSpots++;
-            return true;
-        }
-        return false;
+    // Metodo per annullare una prenotazione di più posti
+    public boolean cancelBooking(int numberOfPeople) {
+        availableSpots += numberOfPeople;
+        return true;  // Puoi aggiungere una logica di controllo se necessario
     }
 
     // Metodo per aggiungere una nuova attività al viaggio

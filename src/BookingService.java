@@ -46,19 +46,28 @@ public class BookingService {
 
             Trip selectedTrip = suitableTrips.get(choice - 1);
 
-            if (selectedTrip.bookSpot()) {
+            // Chiedere il numero di persone per la prenotazione
+            System.out.print("📌 Inserisci il numero di persone per cui stai prenotando: ");
+            int numberOfPeople = scanner.nextInt();
+
+            if (numberOfPeople <= 0) {
+                System.out.println("❌ Il numero di persone deve essere maggiore di 0.");
+                continue;
+            }
+
+            if (selectedTrip.bookSpots(numberOfPeople)) {
                 PaymentDetails paymentDetails = traveller.providePaymentDetails();
-                Booking booking = new Booking(selectedTrip, paymentDetails);
+                Booking booking = new Booking(selectedTrip, paymentDetails, numberOfPeople);
                 boolean paymentSuccess = paymentProcessor.processPayment(booking);
 
                 if (paymentSuccess) {
                     traveller.addBookedTrip(selectedTrip);
-                    System.out.println("🎉 Prenotazione confermata per " + selectedTrip.getDestination() + "!");
+                    System.out.println("🎉 Prenotazione confermata per " + numberOfPeople + " persone al viaggio " + selectedTrip.getDestination() + "!");
                 } else {
                     System.out.println("❌ Pagamento fallito. Prenotazione non completata.");
                 }
             } else {
-                System.out.println("❌ Posti esauriti.");
+                System.out.println("❌ Non ci sono abbastanza posti disponibili per " + numberOfPeople + " persone.");
             }
         }
     }
