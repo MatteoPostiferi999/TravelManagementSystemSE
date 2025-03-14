@@ -1,0 +1,47 @@
+@startuml
+'https://plantuml.com/use-case-diagram
+
+:traveller: as tr
+:user:
+:guide: as gu
+tr <|-- :user:
+gu <|-- :user:
+
+:user: --> (Manage profile)
+:user: --> (Choose actor)
+
+tr --> (cancel booking)
+tr --> (booking trip)
+tr --> (view trips)
+tr --> (set filters)
+tr --> (leave a review) : trip already completed
+
+(set filters) ..> (view trips) : extend
+(booking trip) ..> (view trips) : include
+(booking trip) ..> (payment) : include
+
+(Handle review) ..> (leave a review) : extend
+(leave a review) ..> (Notify guide) : include
+
+gu --> (Send application)
+gu --> (Add skills)
+gu --> (Add preferences)
+gu --> (View trips)
+gu --> (withdraw application)
+
+(Add preferences) ..> (View trips) : extend
+(withdraw application) ..> (Notify agency) : include
+
+:Agency: as ag
+
+ag --> (Manage guide)
+ag --> (create trip)
+ag --> (delete trip)
+ag --> (edit trip)
+
+(delete trip) ..> (Notify guide) : include
+(edit trip) ..> (Notify guide) : include
+(delete trip) ..> (Notify traveller) : include
+(edit trip) ..> (Notify traveller): include
+
+@enduml
