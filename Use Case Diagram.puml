@@ -4,6 +4,10 @@
 :traveller: as tr
 :user:
 :guide: as gu
+:Agency: as ag
+gu -[hidden]-> ag
+tr -[hidden]-> ag
+:user: -[hidden]-> ag
 tr <|-- :user:
 gu <|-- :user:
 
@@ -20,7 +24,8 @@ tr --> (leave a review) : trip already completed
 (booking trip) ..> (view trips) : include
 (booking trip) ..> (payment) : include
 
-(Handle review) ..> (leave a review) : extend
+(edit review) ..> (leave a review) : extend
+(cancel booking) -[hidden]-> (edit review)
 (leave a review) ..> (Notify guide) : include
 
 gu --> (Send application)
@@ -31,8 +36,6 @@ gu --> (withdraw application)
 
 (Add preferences) ..> (View trips) : extend
 (withdraw application) ..> (Notify agency) : include
-
-:Agency: as ag
 
 ag --> (Manage guide)
 ag --> (create trip)
