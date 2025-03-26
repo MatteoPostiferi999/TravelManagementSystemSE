@@ -15,8 +15,8 @@ gu <|-- :user:
 :user: --> (Choose actor)
 
 tr --> (cancel booking)
-tr --> (booking trip)
 tr --> (view trips)
+tr --> (booking trip)
 tr --> (set filters)
 tr --> (leave a review) : trip already completed
 
@@ -26,7 +26,10 @@ tr --> (leave a review) : trip already completed
 
 (edit review) ..> (leave a review) : extend
 (cancel booking) -[hidden]-> (edit review)
-(leave a review) ..> (Notify guide) : include
+(Notify guide) as ngt
+(Notify agency) as nat
+(leave a review) ..> ngt : include
+(leave a review) ..> nat : include
 
 gu --> (Send application)
 gu --> (Add skills)
@@ -34,7 +37,8 @@ gu --> (Add preferences)
 gu --> (View trips)
 gu --> (withdraw application)
 
-(Add preferences) ..> (View trips) : extend
+(View trips) ..> (Manage preferences) : extend
+(View trips) ..> (Manage skills) : include
 (withdraw application) ..> (Notify agency) : include
 
 ag --> (Manage guide)
