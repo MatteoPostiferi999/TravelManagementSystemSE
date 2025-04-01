@@ -2,25 +2,20 @@
 'https://plantuml.com/use-case-diagram
 
 :traveller: as tr
-:user:
+:Unqualified:
 :guide: as gu
 :Agency: as ag
-gu -[hidden]-> ag
-tr -[hidden]-> ag
-:user: -[hidden]-> ag
-tr <|-- :user:
-gu <|-- :user:
 
-:user: --> (Manage profile)
-:user: --> (Choose actor)
+:Unqualified: --> (Manage profile)
+:Unqualified: --> (Choose role)
 
 tr --> (cancel booking)
 tr --> (view trips)
 tr --> (booking trip)
 tr --> (set filters)
-tr --> (leave a review) : trip already completed
+tr -left-> (leave a review) : trip already completed
 
-(set filters) ..> (view trips) : extend
+(view trips) ..>(set filters) : extend
 (booking trip) ..> (view trips) : include
 (booking trip) ..> (payment) : include
 
